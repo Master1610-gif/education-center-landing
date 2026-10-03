@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang="vi"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trung tâm giáo dục — Để con được học, thử và tự tin hơn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Gelasio:wght@500;600&amp;family=Hind+Siliguri:wght@400;500;600&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    /* ---- tokens ---- */
+    :root {
+      --bg: oklch(97.5% 0.01 90);
+      --surface: oklch(100% 0 0);
+      --fg: oklch(27% 0.02 75);
+      --muted: oklch(52% 0.02 75);
+      --border: oklch(90% 0.008 85);
+      --burgundy: oklch(29% 0.085 16);
+      --burgundy-deep: oklch(24% 0.075 16);
+      --pink: oklch(84% 0.05 15);
+      --font-display: 'Gelasio', 'Tinos', Georgia, 'Times New Roman', serif;
+      --font-body: 'Hind Siliguri', 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --header-pad-x: clamp(48px, 4.4vw, 64px);
+      --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+      --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; background: none; border: 0; cursor: pointer; color: inherit; }
+
+    /* ---- header ---- */
+    .site-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      height: 92px;
+      padding: 0 var(--header-pad-x);
+      display: flex;
+      align-items: center;
+      background: transparent;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, 0);
+      transition: height 300ms ease-out, background-color 300ms ease-out,
+                  box-shadow 300ms ease-out, backdrop-filter 300ms ease-out;
+    }
+      .site-header.is-scrolled,
+      .site-header.menu-open {
+        height: 72px;
+        background-color: rgba(250, 247, 241, 0.92);
+        background: color-mix(in oklab, var(--bg) 92%, transparent);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 var(--border), 0 8px 24px oklch(27% 0.02 75 / 0.06);
+    }
+    .header-inner {
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    /* logo */
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      flex-shrink: 0;
+      pointer-events: auto;
+    }
+    .brand-mark {
+      position: relative;
+      width: 26px; height: 26px;
+      border-radius: 7px;
+      background: var(--burgundy);
+      flex-shrink: 0;
+    }
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      right: 5px; bottom: 5px;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--pink);
+    }
+    .brand-text {
+      font-size: 13.5px;
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--burgundy);
+      letter-spacing: 0.015em;
+      white-space: nowrap;
+    }
+
+    /* nav */
+    .primary-nav {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .primary-nav a {
+      position: relative;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1;
+      color: var(--fg);
+      letter-spacing: 0;
+      text-transform: none;
+      padding: 6px 0;
+      pointer-events: auto;
+    }
+    .primary-nav a::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: 0;
+      width: 0; height: 2px;
+      background: var(--burgundy);
+      transition: width 220ms ease-out;
+    }
+    .primary-nav a:hover::after,
+    .primary-nav a:focus-visible::after { width: 100%; }
+
+    /* header CTA */
+    .nav-cta {
+      margin-left: 36px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      height: 40px;
+      padding: 0 18px;
+      border-radius: 8px;
+      background: var(--burgundy);
+      color: var(--surface);
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1;
+      white-space: nowrap;
+      pointer-events: auto;
+      transition: background-color 200ms ease-out, transform 200ms ease-out;
+    }
+    .nav-cta:hover { background: var(--burgundy-deep); transform: translateY(-2px); }
+    .nav-cta .arr { transition: transform 200ms ease-out; }
+    .nav-cta:hover .arr { transform: translateX(3px); }
+
+    /* burger */
+    .menu-toggle {
+      display: none;
+      margin-left: auto;
+      width: 44px; height: 44px;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 5px;
+      border-radius: 8px;
+      pointer-events: auto;
+    }
+    .menu-toggle span {
+      display: block;
+      width: 20px; height: 2px;
+      background: var(--fg);
+      border-radius: 1px;
+      transition: transform 250ms ease-out, opacity 250ms ease-out;
+    }
+    .menu-toggle[aria-expanded="true"] span:first-child { transform: translateY(3.5px) rotate(45deg); }
+    .menu-toggle[aria-expanded="true"] span:last-child { transform: translateY(-3.5px) rotate(-45deg); }
+
+    /* mobile menu */
+    .mobile-menu {
+      position: fixed;
+      top: 76px; left: 0; right: 0;
+      z-index: 49;
+      background-color: rgba(250, 247, 241, 0.97);
+      background: color-mix(in oklab, var(--bg) 97%, transparent);
+      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 24px 28px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: opacity 300ms ease-out, transform 300ms ease-out, visibility 0s linear 300ms;
+    }
+    .mobile-menu.is-open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      transition: opacity 300ms ease-out, transform 300ms ease-out, visibility 0s;
+    }
+    .mobile-menu a.menu-item {
+      display: block;
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--fg);
+      padding: 14px 0;
+      border-bottom: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 300ms ease-out, transform 300ms ease-out;
+    }
+    .mobile-menu.is-open a.menu-item {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: calc(var(--i, 0) * 50ms);
+    }
+    .mobile-menu .menu-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 20px;
+      height: 48px;
+      padding: 0 24px;
+      border-radius: 9px;
+      background: var(--burgundy);
+      color: var(--surface);
+      font-size: 15.5px;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 300ms ease-out, transform 300ms ease-out, background-color 200ms ease-out;
+      transition-delay: 0ms;
+    }
+    .mobile-menu.is-open .menu-cta {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 150ms;
+    }
+    .mobile-menu .menu-cta:hover { background: var(--burgundy-deep); }
+
+    /* ---- hero ---- */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      min-height: 100svh;
+      overflow: hidden;
+      background: var(--bg);
+    }
+    .hero-media {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: 50% 50%;
+      animation: heroImg 1000ms var(--ease-out) both;
+    }
+    .hero-veil {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg,
+          oklch(97.5% 0.01 90 / 0.72) 0,
+          oklch(97.5% 0.01 90 / 0.34) 8.5%,
+          oklch(97.5% 0.01 90 / 0) 17%),
+        linear-gradient(90deg,
+          oklch(97.5% 0.01 90 / 0.52) 0,
+          oklch(97.5% 0.01 90 / 0.28) 28%,
+          oklch(97.5% 0.01 90 / 0.07) 45%,
+          oklch(97.5% 0.01 90 / 0) 58%);
+    }
+    .hero-copy {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8vh var(--header-pad-x) 0 7.5%;
+      pointer-events: none;
+    }
+    .hero-copy > * { pointer-events: auto; }
+    .hero-headline {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: clamp(36px, 3.55vw, 54px);
+      line-height: 1.09;
+      color: var(--burgundy);
+      max-width: 500px;
+      letter-spacing: -0.005em;
+      text-wrap: balance;
+      animation: rise 650ms var(--ease-soft) 180ms both;
+    }
+    .hero-support {
+      margin-top: 22px;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.45;
+      color: var(--fg);
+      max-width: 330px;
+      animation: riseSm 500ms var(--ease-soft) 330ms both;
+    }
+    .hero-cta-slot {
+      margin-top: 30px;
+      animation: riseSm 500ms var(--ease-soft) 480ms both;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 50px;
+      padding: 0 24px;
+      border-radius: 9px;
+      background: var(--burgundy);
+      color: var(--surface);
+      font-size: 15.5px;
+      font-weight: 600;
+      line-height: 1;
+      box-shadow: 0 1px 2px oklch(29% 0.085 16 / 0.18);
+      transition: background-color 200ms ease-out, transform 200ms ease-out;
+    }
+    .hero-cta:hover {
+      background: var(--burgundy-deep);
+      transform: translateY(-2px);
+    }
+    .hero-cta .arr { transition: transform 200ms ease-out; }
+    .hero-cta:hover .arr { transform: translateX(3px); }
+
+    /* scroll cue */
+    .scroll-cue {
+      position: absolute;
+      left: 50%;
+      bottom: 26px;
+      transform: translateX(-50%);
+      width: 34px; height: 34px;
+      display: grid;
+      place-items: center;
+      color: var(--burgundy);
+      opacity: 0.65;
+      pointer-events: none;
+      animation: cue 2.4s ease-in-out infinite;
+    }
+
+    /* ---- keyframes ---- */
+    @keyframes heroImg {
+      from { opacity: 0; transform: scale(1.03); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes riseSm {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes cue {
+      0%, 100% { transform: translate(-50%, 0); }
+      50%      { transform: translate(-50%, 5px); }
+    }
+
+    /* ---- responsive ---- */
+    @media (max-width: 1023px) {
+      .hero-media { object-position: 68% 50%; }
+    }
+    @media (max-width: 899px) {
+      .primary-nav, .nav-cta { display: none; }
+      .menu-toggle { display: flex; }
+      .site-header { height: 76px; padding: 0 24px; }
+      .site-header.is-scrolled,
+      .site-header.menu-open { height: 64px; }
+      .mobile-menu { top: 76px; }
+      .site-header.is-scrolled ~ .mobile-menu { top: 64px; }
+    }
+    @media (max-width: 767px) {
+      .hero-media { object-position: 74% 50%; }
+      .hero-veil {
+        background:
+          linear-gradient(180deg,
+            oklch(97.5% 0.01 90 / 0.6) 0,
+            oklch(97.5% 0.01 90 / 0.25) 7%,
+            oklch(97.5% 0.01 90 / 0) 14%),
+          linear-gradient(180deg,
+            oklch(97.5% 0.01 90 / 0) 42%,
+            oklch(97.5% 0.01 90 / 0.38) 56%,
+            oklch(97.5% 0.01 90 / 0.85) 72%,
+            oklch(97.5% 0.01 90 / 0.96) 100%);
+      }
+      .hero-copy {
+        justify-content: flex-end;
+        padding: 0 24px calc(84px + env(safe-area-inset-bottom, 0px));
+      }
+      .hero-headline {
+        font-size: clamp(30px, 8.2vw, 38px);
+        max-width: 340px;
+        line-height: 1.12;
+      }
+      .hero-support {
+        margin-top: 18px;
+        font-size: 16.5px;
+        max-width: 300px;
+      }
+      .hero-cta-slot { margin-top: 26px; }
+      .scroll-cue { bottom: 20px; }
+    }
+
+    /* ---- reduced motion ---- */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .hero-media, .hero-headline, .hero-support, .hero-cta-slot {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* ---- section 2 : tall editorial rhythm ---- */
+    .programs {
+      position: relative;
+      background: #FFFFFF;
+      max-width: 1440px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .programs .desk-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+    .programs .desk-bg img { width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
+    .programs-head { position: relative; z-index: 3; text-align: center; padding: 104px 24px 0; }
+    .programs-title {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: clamp(30px, 2.9vw, 42px);
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      color: var(--burgundy);
+    }
+    .programs-sub {
+      margin-top: 12px;
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+    .programs .flow {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      padding: 110px 0 150px;
+    }
+    .programs .slot { display: flex; }
+    .programs .slot--right { justify-content: flex-end; }
+    .programs .slot--left { justify-content: flex-start; }
+    .programs .slot--1 { padding-right: 11%; }
+    .programs .slot--2 { padding-left: 12%; margin-top: 168px; }
+    .programs .slot--3 { padding-right: 8%; margin-top: 196px; }
+    .programs .slot--4 { padding-left: 15%; margin-top: 172px; }
+    .programs .shot {
+      opacity: 0;
+      transform: translateY(38px) rotate(var(--r));
+    }
+    .programs .shot .ph {
+      background: #fff;
+      box-shadow: 0 2px 6px oklch(27% 0.02 75 / 0.10), 0 20px 44px oklch(27% 0.02 75 / 0.13);
+    }
+    .programs .shot img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+    .programs .shot--1 { width: 470px; --r: -5deg; }
+    .programs .shot--2 { width: 445px; --r: 4deg; }
+    .programs .shot--3 { width: 480px; --r: 6deg; }
+    .programs .shot--4 { width: 450px; --r: -4deg; }
+    .programs .shot.inview { animation: shotSettle 800ms cubic-bezier(0.22, 0.9, 0.3, 1) forwards; }
+    @keyframes shotSettle {
+      0%   { opacity: 0; transform: translateY(38px) rotate(var(--r)); }
+      70%  { opacity: 1; transform: translateY(-5px) rotate(var(--r)); }
+      100% { opacity: 1; transform: translateY(0) rotate(var(--r)); }
+    }
+    @media (max-width: 1100px) {
+      .programs .shot--1 { width: 405px; }
+      .programs .shot--2 { width: 385px; }
+      .programs .shot--3 { width: 410px; }
+      .programs .shot--4 { width: 390px; }
+      .programs .slot--2 { margin-top: 140px; }
+      .programs .slot--3 { margin-top: 150px; }
+      .programs .slot--4 { margin-top: 140px; }
+    }
+    @media (max-width: 720px) {
+      .programs-head { padding: 72px 24px 0; }
+      .programs .flow { padding: 84px 0 110px; }
+      .programs .shot--1, .programs .shot--2,
+      .programs .shot--3, .programs .shot--4 { width: min(78vw, 380px); }
+      .programs .slot--1 { padding-right: 7%; }
+      .programs .slot--2 { padding-left: 8%; margin-top: 118px; }
+      .programs .slot--3 { padding-right: 10%; margin-top: 126px; }
+      .programs .slot--4 { padding-left: 7%; margin-top: 118px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .programs .shot { opacity: 1; transform: rotate(var(--r)); }
+      .programs .shot.inview { animation: none; }
+    }
+
+    /* ---- section 3 phase 1 : single static state ---- */
+    .edip { position: relative; width: 100%; height: 100vh; min-height: 100svh; overflow: hidden; background: #FDFBF7; }
+    .edip-bg { position: absolute; inset: 0; }
+    .edip-bg img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 28% 50%; }
+    .edip-veil {
+      position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(270deg,
+        rgba(253, 251, 247, 0.95) 0%,
+        rgba(253, 251, 247, 0.82) 32%,
+        rgba(253, 251, 247, 0.40) 55%,
+        rgba(253, 251, 247, 0) 70%);
+    }
+    .edip-copy {
+      position: absolute; z-index: 3;
+      right: clamp(24px, 7%, 120px);
+      top: 50%; transform: translateY(-50%);
+      width: min(430px, 36vw);
+      text-align: left;
+    }
+    .edip-eyebrow {
+      font-size: 13px; font-weight: 600;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--burgundy);
+    }
+    .edip-title {
+      margin-top: 14px;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: clamp(34px, 3.4vw, 52px);
+      line-height: 1.12;
+      letter-spacing: -0.01em;
+      color: var(--burgundy);
+    }
+    .edip-sub {
+      margin-top: 14px;
+      font-size: 18px; font-weight: 500; line-height: 1.5;
+      color: var(--fg);
+    }
+    .edip-body {
+      margin-top: 12px;
+      font-size: 16.5px; font-weight: 400; line-height: 1.65;
+      color: var(--muted);
+    }
+    .edip-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 24px;
+      padding: 12px 4px;
+      min-height: 48px;
+      font-size: 16px; font-weight: 600; line-height: 1;
+      color: var(--burgundy); text-decoration: none;
+      border-bottom: 2px solid var(--burgundy);
+      transition: gap 200ms ease-out;
+    }
+    .edip-cta:hover { gap: 12px; }
+    .edip-cta .arr { transition: transform 200ms ease-out; }
+    .edip-cta:hover .arr { transform: translateX(3px); }
+    @media (max-width: 720px) {
+      .edip-bg img { object-position: 22% 50%; }
+      .edip-veil {
+        background: linear-gradient(180deg,
+          rgba(253, 251, 247, 0) 30%,
+          rgba(253, 251, 247, 0.55) 52%,
+          rgba(253, 251, 247, 0.94) 74%,
+          rgba(253, 251, 247, 1) 100%);
+      }
+      .edip-copy {
+        right: 20px; left: 20px; top: auto; bottom: max(28px, env(safe-area-inset-bottom, 0px));
+        transform: none; width: auto;
+      }
+      .edip-title { font-size: clamp(28px, 8vw, 36px); }
+      .edip-sub { font-size: 16.5px; }
+      .edip-body { font-size: 15.5px; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <header class="site-header" id="site-header" data-od-id="site-header">
+    <div class="header-inner">
+      <!-- Thay wordmark bằng logo thật của trung tâm khi có -->
+      <a class="brand" href="#" data-od-id="brand-logo" aria-label="Trung tâm giáo dục — trang chủ">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text">Trung tâm<br>giáo dục</span>
+      </a>
+
+      <nav class="primary-nav" data-od-id="primary-nav" aria-label="Điều hướng chính">
+        <a href="#lop-hoc">Lớp học</a>
+        <a href="#moi-truong">Môi trường</a>
+        <a href="#ve-chung-toi">Về chúng tôi</a>
+      </nav>
+
+      <a class="nav-cta" href="#lop-hoc" data-od-id="nav-cta">Tìm lớp cho bé <span class="arr" aria-hidden="true">→</span></a>
+
+      <button class="menu-toggle" id="menu-toggle" data-od-id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Mở menu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu" data-od-id="mobile-menu">
+    <a class="menu-item" style="--i:0" href="#lop-hoc">Lớp học</a>
+    <a class="menu-item" style="--i:1" href="#moi-truong">Môi trường</a>
+    <a class="menu-item" style="--i:2" href="#ve-chung-toi">Về chúng tôi</a>
+    <a class="menu-cta" href="#lop-hoc">Tìm lớp cho bé <span class="arr" aria-hidden="true">→</span></a>
+  </div>
+
+  <section class="hero" data-od-id="hero">
+    <img class="hero-media" data-od-id="hero-media" src="Gemini_Generated_Image_5q0sdy5q0sdy5q0s.png" alt="Giáo viên ngồi sát bên hướng dẫn một học sinh đang vẽ trong lớp học của trung tâm">
+    <div class="hero-veil" data-od-id="hero-veil" aria-hidden="true"></div>
+
+    <div class="hero-copy" data-od-id="hero-copy">
+      <h1 class="hero-headline" data-od-id="hero-headline">Để con được học, thử và tự tin hơn.</h1>
+      <p class="hero-support" data-od-id="hero-support">Giáo viên đồng hành, con chủ động khám phá.</p>
+      <div class="hero-cta-slot">
+        <a class="hero-cta" href="#lop-hoc" data-od-id="hero-cta">Tìm lớp cho bé <span class="arr" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <div class="scroll-cue" data-od-id="scroll-cue" aria-hidden="true">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M4 7l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </div>
+  </section>
+
+  <section class="programs" id="lop-hoc" aria-labelledby="programs-title" data-od-id="programs-section">
+    <div class="desk-bg" aria-hidden="true">
+      <img src="Gemini_Generated_Image_l5rmakl5rmakl5rm.png" alt="" loading="lazy" decoding="async">
+    </div>
+    <div class="programs-head">
+      <h2 class="programs-title" id="programs-title" data-od-id="programs-heading">Chọn lớp học phù hợp với con</h2>
+      <p class="programs-sub" data-od-id="programs-sub"></p>
+    </div>
+    <div class="flow" data-od-id="programs-flow">
+      <div class="slot slot--right slot--1">
+        <figure class="shot shot--1" data-od-id="program-shot-art">
+          <div class="ph"><img src="Gemini_Generated_Image_56pnqb56pnqb56pn.png" alt="Lớp học vẽ: bé gái 7 đến 10 tuổi tự mình vẽ tranh bằng chì màu, cô giáo ở xa phía sau" loading="lazy" decoding="async"></div>
+        </figure>
+      </div>
+      <div class="slot slot--left slot--2">
+        <figure class="shot shot--2" data-od-id="program-shot-tutoring">
+          <div class="ph"><img src="Gemini_Generated_Image_xfvrlhxfvrlhxfvr.png" alt="Gia sư các cấp: bé trai chỉ vào vở, trao đổi trực tiếp với cô gia sư" loading="lazy" decoding="async"></div>
+        </figure>
+      </div>
+      <div class="slot slot--right slot--3">
+        <figure class="shot shot--3" data-od-id="program-shot-handwriting">
+          <div class="ph"><img src="Gemini_Generated_Image_nyi3innyi3innyi3.png" alt="Tiền tiểu học và luyện chữ đẹp: bé gái 5 đến 6 tuổi tự luyện viết chữ trong vở" loading="lazy" decoding="async"></div>
+        </figure>
+      </div>
+      <div class="slot slot--left slot--4">
+        <figure class="shot shot--4" data-od-id="program-shot-english">
+          <div class="ph"><img src="Gemini_Generated_Image_gqksegqksegqkseg.png" alt="Tiếng Anh giao tiếp: bé trai trò chuyện bằng cử chỉ với cô giáo nước ngoài" loading="lazy" decoding="async"></div>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="edip" id="section-3" aria-label="Con cần tạo ra" data-od-id="section-3">
+    <div class="edip-bg" data-od-id="s3-bg"><img src="Gemini_Generated_Image_7kolo37kolo37kol.png" alt="Bé gái cầm tác phẩm vừa tự vẽ xong" loading="lazy" decoding="async"></div>
+    <div class="edip-veil" aria-hidden="true"></div>
+    <div class="edip-copy" data-od-id="s3-copy">
+      <p class="edip-eyebrow">Con cần</p>
+      <h2 class="edip-title">Tạo ra</h2>
+      <p class="edip-sub">Không chỉ làm theo một mẫu có sẵn.</p>
+      <p class="edip-body">Con được khám phá, thử nghiệm và tự mình tạo nên những điều mang dấu ấn riêng. Từ cách chọn màu, hình thành ý tưởng đến hoàn thiện tác phẩm, mỗi sản phẩm là một cơ hội để con thể hiện điều mình nghĩ và dần tự tin hơn với khả năng sáng tạo của mình.</p>
+      <a class="edip-cta" href="#lop-hoc" data-od-id="s3-cta">Xem lớp học vẽ <span class="arr" aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+  <script>
+    (function () {
+      var shots = Array.prototype.slice.call(document.querySelectorAll('.programs .shot'));
+      function show(el) { el.classList.add('inview'); }
+      if ('IntersectionObserver' in window) {
+        var io = new IntersectionObserver(function (es) {
+          es.forEach(function (e) {
+            if (e.isIntersecting) { show(e.target); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.25 });
+        shots.forEach(function (s) { io.observe(s); });
+      } else { shots.forEach(show); }
+    })();
+  </script>
+
+  <script>
+    (function () {
+      var header = document.getElementById('site-header');
+      var toggle = document.getElementById('menu-toggle');
+      var menu = document.getElementById('mobile-menu');
+
+      function onScroll() {
+        header.classList.toggle('is-scrolled', window.scrollY > 60);
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      function setMenu(open) {
+        toggle.setAttribute('aria-expanded', String(open));
+        toggle.setAttribute('aria-label', open ? 'Đóng menu' : 'Mở menu');
+        menu.classList.toggle('is-open', open);
+        header.classList.toggle('menu-open', open);
+        document.body.style.overflow = open ? 'hidden' : '';
+      }
+      toggle.addEventListener('click', function () {
+        setMenu(toggle.getAttribute('aria-expanded') !== 'true');
+      });
+      menu.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () { setMenu(false); });
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') setMenu(false);
+      });
+      window.addEventListener('resize', function () {
+        if (window.innerWidth >= 900) setMenu(false);
+      });
+    })();
+  </script>
+
+
+</body></html>

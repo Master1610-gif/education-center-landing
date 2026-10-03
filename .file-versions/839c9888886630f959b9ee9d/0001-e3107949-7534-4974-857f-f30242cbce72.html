@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hero — Trung tâm giáo dục</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Tinos:wght@400;700&family=Hind+Siliguri:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#FDFBF7;
+    --paper-soft:#FAF4EC;
+    --burgundy:#6B1E2B;
+    --burgundy-deep:#4E1420;
+    --pink:#F2D8D3;
+    --ink:#2B2421;
+    --muted:#6F625B;
+    --line:rgba(107,30,43,.16);
+    --header-px:56px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  html,body{width:100%}
+  body{
+    font-family:"Hind Siliguri",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit}
+  button{font:inherit}
+
+  /* ---------- Header ---------- */
+  .site-header{
+    position:fixed;inset:0 0 auto 0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:30px var(--header-px) 0;
+    height:96px;
+    transition:background 300ms ease-out,box-shadow 300ms ease-out,height 300ms ease-out,padding 300ms ease-out;
+  }
+  .site-header.scrolled{
+    height:72px;padding:0 var(--header-px);
+    background:rgba(253,251,247,.92);
+    -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+    box-shadow:0 1px 0 rgba(43,36,33,.07),0 14px 34px rgba(78,20,32,.08);
+  }
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0}
+  .brand-mark{
+    width:30px;height:30px;border-radius:8px;background:var(--burgundy);color:#fff;
+    display:grid;place-items:center;font-family:"Tinos",Georgia,serif;font-weight:700;font-size:19px;line-height:1;
+  }
+  .brand-text{display:flex;flex-direction:column;line-height:1}
+  .brand-name{font-family:"Tinos",Georgia,serif;font-weight:700;font-size:20px;color:var(--burgundy);letter-spacing:-.01em}
+  .brand-sub{font-size:9px;font-weight:600;letter-spacing:.24em;color:var(--muted);margin-top:3px}
+  .header-right{display:flex;align-items:center}
+  .main-nav{display:flex;align-items:center;gap:32px;margin-right:36px}
+  .main-nav a{
+    position:relative;text-decoration:none;font-size:15px;font-weight:500;line-height:1;color:#3D2A2E;
+    padding:8px 0;white-space:nowrap;
+  }
+  .main-nav a::after{
+    content:"";position:absolute;left:0;bottom:2px;height:2px;width:100%;
+    background:var(--burgundy);border-radius:2px;
+    transform:scaleX(0);transform-origin:left center;
+    transition:transform 220ms ease-out;
+  }
+  .main-nav a:hover::after,.main-nav a:focus-visible::after{transform:scaleX(1)}
+  .main-nav a:focus-visible{outline:2px solid var(--burgundy);outline-offset:4px;border-radius:2px}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    background:var(--burgundy);color:#fff;text-decoration:none;
+    font-weight:600;font-size:16px;line-height:1;border:0;cursor:pointer;
+    height:50px;min-width:158px;padding:0 24px;border-radius:9px;
+    box-shadow:0 10px 24px rgba(107,30,43,.18);
+    transition:transform 200ms ease-out,background-color 200ms ease-out,box-shadow 200ms ease-out;
+  }
+  .btn:hover{background:var(--burgundy-deep);transform:translateY(-2px);box-shadow:0 14px 28px rgba(78,20,32,.22)}
+  .btn:active{transform:translateY(0)}
+  .btn:focus-visible{outline:2px solid var(--burgundy-deep);outline-offset:3px}
+  .btn--small{height:42px;min-width:0;padding:0 20px;font-size:15px;box-shadow:none}
+  .btn .arr{font-size:18px;line-height:1;transform:translateY(-1px)}
+  .menu-toggle{
+    display:none;width:44px;height:44px;border:1px solid var(--line);border-radius:10px;
+    background:rgba(253,251,247,.9);cursor:pointer;align-items:center;justify-content:center;flex-direction:column;gap:5px;
+  }
+  .menu-toggle span{display:block;width:18px;height:2px;background:var(--burgundy);border-radius:2px;transition:transform 250ms ease-out,opacity 250ms}
+  .menu-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .menu-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+  .menu-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .mobile-menu{
+    display:none;position:fixed;top:84px;left:16px;right:16px;z-index:49;
+    background:rgba(253,251,247,.98);border:1px solid rgba(43,36,33,.08);border-radius:16px;
+    box-shadow:0 24px 60px rgba(43,36,33,.14);padding:10px;
+    opacity:0;transform:translateY(-8px);pointer-events:none;transition:opacity 300ms ease-out,transform 300ms ease-out;
+  }
+  .mobile-menu.open{opacity:1;transform:translateY(0);pointer-events:auto}
+  .mobile-menu a{
+    display:flex;align-items:center;justify-content:space-between;text-decoration:none;
+    padding:15px 16px;border-radius:12px;font-size:17px;font-weight:500;color:#3D2A2E;
+    opacity:0;transform:translateY(-8px);transition:opacity 300ms ease-out,transform 300ms ease-out,background 200ms;
+  }
+  .mobile-menu.open a{opacity:1;transform:translateY(0)}
+  .mobile-menu.open a:nth-child(1){transition-delay:40ms}
+  .mobile-menu.open a:nth-child(2){transition-delay:90ms}
+  .mobile-menu.open a:nth-child(3){transition-delay:140ms}
+  .mobile-menu.open a:nth-child(4){transition-delay:190ms}
+  .mobile-menu a:hover{background:#F6ECE6}
+  .mobile-menu a.cta-row{background:var(--burgundy);color:#fff;font-weight:600;margin-top:6px;justify-content:center}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;min-height:100vh;min-height:100svh;height:100vh;overflow:hidden;
+    background:var(--paper);isolation:isolate;
+  }
+  .hero-media{position:absolute;inset:0;z-index:0;overflow:hidden}
+  .hero-media img{
+    width:100%;height:100%;object-fit:cover;object-position:62% 50%;
+    opacity:0;transform:scale(1.03);
+  }
+  body.loaded .hero-media img{animation:heroImg 1100ms ease-out forwards}
+  @keyframes heroImg{to{opacity:1;transform:scale(1)}}
+  .hero-scrim{
+    position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:
+      linear-gradient(180deg,rgba(253,251,247,.28) 0%,rgba(253,251,247,0) 22%),
+      linear-gradient(90deg,#FDFBF7 0%,rgba(253,251,247,.97) 27%,rgba(253,251,247,.78) 42%,rgba(253,251,247,.22) 58%,rgba(253,251,247,0) 68%),
+      linear-gradient(180deg,rgba(253,251,247,0) 74%,rgba(253,251,247,.55) 100%);
+  }
+  .hero-grain{
+    position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.05;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.9'/%3E%3C/svg%3E");
+  }
+  .hero-inner{
+    position:relative;z-index:2;height:100%;
+    display:flex;align-items:center;
+    padding:96px var(--header-px) 80px;
+  }
+  .hero-content{
+    margin-left:calc(8% - var(--header-px));
+    max-width:480px;
+    transform:translateY(4vh);
+  }
+  .hero-title{
+    font-family:"Tinos",Georgia,"Times New Roman",serif;
+    font-weight:700;font-size:clamp(42px,4vw,58px);line-height:1.08;letter-spacing:-.015em;
+    color:var(--burgundy);max-width:480px;text-wrap:balance;
+    opacity:0;transform:translateY(20px);
+  }
+  .hero-sub{
+    margin-top:22px;font-size:18px;font-weight:400;line-height:1.45;color:#3D3430;max-width:330px;
+    opacity:0;transform:translateY(12px);
+  }
+  .hero-cta{margin-top:30px;opacity:0;transform:translateY(12px)}
+  body.loaded .hero-title{animation:rise 650ms ease-out 180ms forwards}
+  body.loaded .hero-sub{animation:riseSmall 500ms ease-out 330ms forwards}
+  body.loaded .hero-cta{animation:riseSmall 500ms ease-out 480ms forwards}
+  @keyframes rise{to{opacity:1;transform:translateY(0)}}
+  @keyframes riseSmall{to{opacity:1;transform:translateY(0)}}
+  .scroll-cue{
+    position:absolute;z-index:2;left:8%;bottom:26px;
+    display:flex;align-items:center;gap:10px;color:rgba(107,30,43,.55);
+    font-size:12px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+    opacity:0;
+  }
+  body.loaded .scroll-cue{animation:riseSmall 600ms ease-out 900ms forwards}
+  .scroll-cue svg{animation:cue 2.2s ease-in-out infinite}
+  @keyframes cue{0%,100%{transform:translateY(0);opacity:.7}50%{transform:translateY(5px);opacity:1}}
+
+  /* demo strip below hero — only to test scroll header, out of scope */
+  .demo-next{
+    background:#fff;border-top:1px solid rgba(43,36,33,.08);
+    padding:56px 8%;color:var(--muted);font-size:15px;line-height:1.6;
+  }
+  .demo-next strong{color:var(--burgundy);font-family:"Tinos",serif;font-size:22px;display:block;margin-bottom:8px}
+  .demo-next code{background:#F6ECE6;border-radius:6px;padding:1px 7px;font-size:13px;color:var(--burgundy)}
+
+  @media (max-width:1024px){
+    :root{--header-px:32px}
+    .hero-content{margin-left:0;max-width:440px}
+    .scroll-cue{left:32px}
+  }
+  @media (max-width:820px){
+    .main-nav,.site-header .btn--small{display:none}
+    .menu-toggle{display:inline-flex}
+    .mobile-menu{display:block}
+    .hero-media img{object-position:70% 38%}
+    .hero-scrim{
+      background:
+        linear-gradient(180deg,rgba(253,251,247,.12) 0%,rgba(253,251,247,0) 34%,rgba(253,251,247,.72) 62%,rgba(253,251,247,.96) 82%,#FDFBF7 100%);
+    }
+    .hero-inner{align-items:flex-end;padding:0 24px 96px}
+    .hero-content{transform:none;max-width:100%}
+    .hero-title{font-size:clamp(34px,9vw,42px);line-height:1.1;max-width:12ch}
+    .hero-sub{font-size:16px;max-width:30ch;margin-top:14px}
+    .hero-cta{margin-top:22px}
+    .hero-cta .btn{width:100%;max-width:340px;height:52px}
+    .scroll-cue{display:none}
+    .site-header{padding:18px 20px 0;height:76px}
+    .site-header.scrolled{padding:0 20px;height:68px}
+    .mobile-menu{top:76px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    body.loaded .hero-media img,body.loaded .hero-title,body.loaded .hero-sub,body.loaded .hero-cta,body.loaded .scroll-cue{animation:none;opacity:1;transform:none}
+    .scroll-cue svg{animation:none}
+    *{transition-duration:.01ms !important}
+  }
+</style>
+</head>
+<body>
+<header class="site-header" id="siteHeader" data-od-id="site-header">
+  <a class="brand" href="#" aria-label="Trang chủ trung tâm" data-od-id="brand-logo">
+    <span class="brand-mark" aria-hidden="true">A</span>
+    <span class="brand-text">
+      <span class="brand-name">An Nhiên</span>
+      <span class="brand-sub">LEARNING CENTER</span>
+    </span>
+  </a>
+  <div class="header-right">
+    <nav class="main-nav" aria-label="Điều hướng chính" data-od-id="main-nav">
+      <a href="#lop-hoc" data-od-id="nav-lop-hoc">Lớp học</a>
+      <a href="#moi-truong" data-od-id="nav-moi-truong">Môi trường</a>
+      <a href="#ve-chung-toi" data-od-id="nav-ve-chung-toi">Về chúng tôi</a>
+    </nav>
+    <a class="btn btn--small" href="#tu-van" data-od-id="header-cta">Tìm lớp cho bé <span class="arr" aria-hidden="true">→</span></a>
+    <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="mobileMenu" aria-label="Mở menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<nav class="mobile-menu" id="mobileMenu" aria-label="Menu di động" data-od-id="mobile-menu">
+  <a href="#lop-hoc">Lớp học <span aria-hidden="true">→</span></a>
+  <a href="#moi-truong">Môi trường <span aria-hidden="true">→</span></a>
+  <a href="#ve-chung-toi">Về chúng tôi <span aria-hidden="true">→</span></a>
+  <a class="cta-row" href="#tu-van">Tìm lớp cho bé →</a>
+</nav>
+
+<main>
+  <section class="hero" aria-label="Giới thiệu trung tâm" data-od-id="hero">
+    <div class="hero-media" aria-hidden="false">
+      <img src="Gemini_Generated_Image_5q0sdy5q0sdy5q0s.png"
+           alt="Cô giáo ngồi ngang tầm mắt, hướng dẫn một bé gái đang vẽ trong lớp học sáng, tường trưng bày tranh vẽ của trẻ"
+           fetchpriority="high" decoding="async" />
+    </div>
+    <div class="hero-scrim" aria-hidden="true"></div>
+    <div class="hero-grain" aria-hidden="true"></div>
+
+    <div class="hero-inner">
+      <div class="hero-content">
+        <h1 class="hero-title" data-od-id="hero-headline">Để con được học, thử và tự tin hơn.</h1>
+        <p class="hero-sub" data-od-id="hero-supporting">Giáo viên đồng hành, con chủ động khám phá.</p>
+        <div class="hero-cta">
+          <a class="btn" href="#lop-hoc" data-od-id="hero-cta">Tìm lớp cho bé <span class="arr" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-cue" aria-hidden="true" data-od-id="scroll-cue">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+        <path d="M4 7l5 5 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Cuộn</span>
+    </div>
+  </section>
+
+  <div class="demo-next" aria-label="Ghi chú demo">
+    <strong>Section tiếp theo: Chương trình · Proof · CTA</strong>
+    Demo này chỉ build <code>hero</code> theo yêu cầu. Dải này để test header chuyển trạng thái sau <code>60px</code> scroll — sẽ thay bằng 4 section thật khi duyệt.
+  </div>
+</main>
+
+<script>
+(function(){
+  var header = document.getElementById('siteHeader');
+  var toggle = document.getElementById('menuToggle');
+  var menu = document.getElementById('mobileMenu');
+  function onScroll(){ header.classList.toggle('scrolled', window.scrollY > 60); }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ document.body.classList.add('loaded'); }); });
+  toggle.addEventListener('click', function(){
+    var open = menu.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    toggle.setAttribute('aria-label', open ? 'Đóng menu' : 'Mở menu');
+  });
+  menu.addEventListener('click', function(e){
+    if(e.target.closest('a')){ menu.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); }
+  });
+})();
+</script>
+</body>
+</html>

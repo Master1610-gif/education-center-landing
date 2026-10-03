@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "hero-section.html",
+  "entry": "hero-section.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-10-02T06:54:28.932Z",
+  "updatedAt": "2026-10-03T05:37:09.251Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "section-2-programs.html",
+  "entry": "section-2-programs.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-10-02T07:29:35.036Z",
+  "updatedAt": "2026-10-02T07:29:35.036Z",
+  "metadata": {
+    "inferred": true,
+    "reconciled": true
+  }
+}
